@@ -3,35 +3,32 @@ import React, { useEffect, useState } from "react";
 import ToggleSwitch from "toggle-switch-react-native";
 import axios from "axios";
 const ManualControl = () => {
-  const [enabel, setEnable] = useState(true);
+  const [enableTemp, setEnableTemp] = useState(true);
+  const [enableHumid, setEnableHumid] = useState(true);
   const [loop, setLoop] = useState(false);
-  const [value, setValue] = useState(0);
+  const [temp, setTemp] = useState(0);
+  const [humid, setHumid] = useState(0);
   // alert("?");
   useEffect(() => {
     axios
       .get("https://io.adafruit.com/api/v2/an_ngdinh/feeds/demo.humid")
       .then(function (response) {
-        // handle success
-        // alert(JSON.stringify(response.data["last_value"]));
-        // setEnable(() => {
-        //   if (response.data.last_value === "1") {
-        //     return true;
-        //   }
-        //   return false;
-        // });
-        // alert(response.data.last_value);
-        setValue(response.data.last_value);
-
+        setHumid(response.data.last_value);
         setLoop((x) => !x);
       })
       .catch(function (error) {
         // handle error
         alert(error.message);
       });
-    // .finally(function () {
-    //   // always executed
-    //   alert("Finally called");
-    // });
+    // axios
+    //   .get("https://io.adafruit.com/api/v2/an_ngdinh/feeds/demo.temp")
+    //   .then(function (response) {
+    //     setTemp(response.data.last_value);
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     alert(error.message);
+    //   });
   }, [loop]);
   const handlePost = () => {
     const headers = {
@@ -39,7 +36,7 @@ const ManualControl = () => {
       "Accept-Encoding": "gzip, deflate, br",
       Connection: "keep-alive",
     };
-    const value = enabel ? "1" : "0";
+    // const value = enabel ? "1" : "0";
     const jsonPost = { last: "1" };
     axios
       .post("https://127.0.0.1:3000/temp/add", jsonPost, headers)
@@ -75,7 +72,7 @@ const ManualControl = () => {
     <>
       <View style={styles.container}>
         <ToggleSwitch
-          isOn={enabel}
+          isOn={enableTemp}
           onColor="green"
           offColor="#d27979"
           label="Manual Control"
@@ -84,15 +81,37 @@ const ManualControl = () => {
           onToggle={(isOn) => {
             console.log("changed to : ", isOn);
             handlePost();
-            setEnable((x) => !x);
+            setEnableTemp((x) => !x);
           }}
           // onPress={() => handlePost()}
           animationSpeed={100}
         />
       </View>
-      {enabel && (
+      {enableTemp && (
         <View style={styles.mainContent}>
-          <Text style={styles.mainContentText}>{value}°C</Text>
+          <Text style={styles.mainContentText}>{temp}°C</Text>
+        </View>
+      )}
+      <View style={styles.container}>
+        <ToggleSwitch
+          isOn={enableHumid}
+          onColor="green"
+          offColor="#d27979"
+          label="Manual Control"
+          labelStyle={{ color: "black", fontWeight: "900", fontSize: 32 }}
+          size="large"
+          onToggle={(isOn) => {
+            console.log("changed to : ", isOn);
+            handlePost();
+            setEnableHumid((x) => !x);
+          }}
+          // onPress={() => handlePost()}
+          animationSpeed={100}
+        />
+      </View>
+      {enableHumid && (
+        <View style={styles.mainContent}>
+          <Text style={styles.mainContentText}>{humid}g/m</Text>
         </View>
       )}
     </>
@@ -122,7 +141,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     color: "white",
     borderRadius: 10,
-    marginTop: 50,
+    marginTop: 30,
   },
   mainContentText: {
     fontSize: 40,
