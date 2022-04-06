@@ -10,16 +10,26 @@ const ManualControl = () => {
   const [humid, setHumid] = useState(0);
   // alert("?");
   useEffect(() => {
-    axios
-      .get("https://io.adafruit.com/api/v2/an_ngdinh/feeds/demo.humid")
-      .then(function (response) {
-        setHumid(response.data.last_value);
-        setLoop((x) => !x);
-      })
-      .catch(function (error) {
-        // handle error
-        alert(error.message);
-      });
+    // axios
+    //   .get("https://io.adafruit.com/api/v2/an_ngdinh/feeds/demo.humid")
+    //   .then(function (response) {
+    //     setHumid(response.data.last_value);
+    //     setLoop((x) => !x);
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     alert(error.message);
+    //   });
+    const apis = [
+      "https://io.adafruit.com/api/v2/an_ngdinh/feeds/demo.humid",
+      "https://io.adafruit.com/api/v2/an_ngdinh/feeds/demo.temp",
+    ];
+    axios.all(apis.map((api) => axios.get(api))).then((data) => {
+      // console.log(data[1].data.last_value);
+      setHumid(data[0].data.last_value);
+      setTemp(data[1].data.last_value);
+      setLoop((x) => !x);
+    });
     // axios
     //   .get("https://io.adafruit.com/api/v2/an_ngdinh/feeds/demo.temp")
     //   .then(function (response) {
@@ -31,21 +41,21 @@ const ManualControl = () => {
     //   });
   }, [loop]);
   const handlePost = () => {
-    const headers = {
-      "Content-Type": "application/json",
-      "Accept-Encoding": "gzip, deflate, br",
-      Connection: "keep-alive",
-    };
-    // const value = enabel ? "1" : "0";
-    const jsonPost = { last: "1" };
-    axios
-      .post("https://127.0.0.1:3000/temp/add", jsonPost, headers)
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((error) => console.log(error));
-    console.log("vcc");
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   "Accept-Encoding": "gzip, deflate, br",
+    //   Connection: "keep-alive",
+    // };
+    // // const value = enabel ? "1" : "0";
+    // const jsonPost = { last: "1" };
+    // axios
+    //   .post("https://127.0.0.1:3000/temp/add", jsonPost, headers)
+    //   .then((res) => {
+    //     console.log(res);
+    //     return res;
+    //   })
+    //   .catch((error) => console.log(error));
+    // console.log("vcc");
     // fetch("https://127.0.0.1:3000/temp/add", {
     //   method: "POST",
     //   headers: {
