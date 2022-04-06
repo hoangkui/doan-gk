@@ -4,7 +4,7 @@ import React, { Component } from "react";
 export default Heading = () => {
   return (
     <View>
-      <Text style={styles.heading}>Temp</Text>
+      <Text style={styles.heading}>NHÓM KTPM</Text>
     </View>
   );
 };

@@ -85,7 +85,7 @@ const ManualControl = () => {
           isOn={enableTemp}
           onColor="green"
           offColor="#d27979"
-          label="Manual Control"
+          label="Control Temp"
           labelStyle={{ color: "black", fontWeight: "900", fontSize: 32 }}
           size="large"
           onToggle={(isOn) => {
@@ -107,7 +107,7 @@ const ManualControl = () => {
           isOn={enableHumid}
           onColor="green"
           offColor="#d27979"
-          label="Manual Control"
+          label="Control Humid"
           labelStyle={{ color: "black", fontWeight: "900", fontSize: 32 }}
           size="large"
           onToggle={(isOn) => {
